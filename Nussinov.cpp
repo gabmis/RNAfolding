@@ -33,7 +33,7 @@ int match(string a, string b){
 }
 
 //implementing the Nussinov algorithm
-void Nussinov(string rna, vector<vector<int> >& M){
+void Nussinov(string rna, vector<vector<int> >& E){
     int n = rna.length();
     //M[i][j] est le nombre maximal de paires pour
     // la sous-séquence [i;j]
@@ -43,51 +43,53 @@ void Nussinov(string rna, vector<vector<int> >& M){
     //initialisation
     for (int p = 0; p < n; p++){
         if (p != n-1){
-            M[p][p] = M[p][p+1] = 0;
+            E[p][p] = E[p][p+1] = 0;
         }else{
-            M[p][p] = 0;
+            E[p][p] = 0;
         }
     }
 
-    // initialisation et induction
     int cas1;
     int cas2;
     int cas3;
     int cas4;
     int maximum;
+
+    //induction
+
     for (int i = n - 3; i > -1; i--){
         for(int j = i + 2; j < n; j++){
             maximum = 0;
             //on calcule les différents cas possibles
             //on essaye d'apparier i et j
-            cas1 = M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1));
+            cas1 = E[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1));
             //on recalcule le max
             maximum = fmax(maximum, cas1);
             //i est ajouté sans etre apparié
-            cas2 = M[i + 1][j];
+            cas2 = E[i + 1][j];
             //on recalcule le max
             maximum = fmax(maximum, cas2);
             //j est ajouté sans être apparié
-            cas3 = M[i][j - 1];
+            cas3 = E[i][j - 1];
             //on recalcule le max
             maximum = fmax(maximum, cas3);
             //on bifurque
             cas4 = 0;
             for (int k = i + 1; k < j - 1; k++){
-                if(M[i][k] + M[k + 1][j] > cas4) {
-                    cas4 = M[i][k] + M[k + 1][j];
+                if(E[i][k] + E[k + 1][j] > cas4) {
+                    cas4 = E[i][k] + E[k + 1][j];
                 }
             }
             //on garde le max
-            M[i][j] = fmax(maximum, cas4);
+            E[i][j] = fmax(maximum, cas4);
         }
     }
 }
 //Etant donné la matrice du nombre maximal de paire cette fonction renvoie
 // l'ensemble des solutions parenthésées sous forme d'un vecteur de string
-void traceBack(string rna, vector<vector<int> > M, int i, int j, vector<vector<vector<string> > >& expressions){
+void traceBack(string rna, vector< vector<int> > M, int i, int j,  vector < vector< vector<string> > >  &expressions){
     int n = rna.length();
-    if (i < j){
+    if(i < j){
 
         // on a rajouté i et j
         if (M[i][j] == M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1))){

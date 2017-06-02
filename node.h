@@ -13,7 +13,7 @@
 using namespace std;
 
 /* Linked list structure */
-class RNA {
+class node {
 public:
     string rna;
     string str;

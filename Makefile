@@ -12,5 +12,8 @@ RNA.o: RNA.h RNA.cpp
 testDisplay: node.o camboui.cpp
 	g++ node.o camboui.cpp -o testDisplay
 
+node.o: node.h node.cpp
+	g++ -c node.cpp -o node.o
+
 clean:
 	rm -f RNA.o testPart1 testPart2
