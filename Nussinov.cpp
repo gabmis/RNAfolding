@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include "RNA.h"
+#include <algorithm>
 using namespace std;
 
 //TODO OPTIMIZE TIME COMPLEXITY

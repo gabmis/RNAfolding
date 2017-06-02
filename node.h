@@ -10,6 +10,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <math.h>
+#include <fstream>
+
 using namespace std;
 
 /* Linked list structure */
@@ -26,6 +29,6 @@ public:
     vector<int> circle;
     vector<node> sons;
     node(string rna, string str, float x1, float x2, float y1, float y2);
-    void display();
+    void display(vector<int> roots);
 }
 ;

@@ -9,8 +9,8 @@ testPart2: ShortestPath.cpp
 RNA.o: RNA.h RNA.cpp
 	g++ -c RNA.cpp -o RNA.o
 
-testDisplay: node.o camboui.cpp
-	g++ node.o camboui.cpp -o testDisplay
+testDisplay: node.o display_rna.cpp
+	g++ node.o displya_rna.cpp -o testDisplay
 
 node.o: node.h node.cpp
 	g++ -c node.cpp -o node.o
