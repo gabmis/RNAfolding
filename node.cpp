@@ -62,7 +62,7 @@ node::node(string rna, string str, float x1, float x2, float y1, float y2) {
                     altitude--;
                 }
                 if (altitude == 0) {
-                    sons.push_back(new node(rna.substr(index,index+compteur),str.substr(index,index+compteur),1.0,1.0,1.0,1.0));
+                    sons.push_back(node(rna.substr(index,index+compteur),str.substr(index,index+compteur),1.0,1.0,1.0,1.0));
                     break;
                 }
                 compteur++;
