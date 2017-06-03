@@ -8,10 +8,16 @@
 #include <fstream>
 #include <cstdlib>
 
+
 using namespace std;
 float delta2 = 1.0;
 
-int main() {
+int main(int argc, char **argv) {
+
+    string str_test = argv[2];
+    string rna_test = argv[1];
+
+
     ofstream myfile1 ("letters.txt", ios::trunc);
     myfile1.close();
 
@@ -19,8 +25,8 @@ int main() {
     //string rna_test = "XAAAAXBBBBBBBBBBBTTTTTTTTUUUUUUUZZZZZOOOOOOOOZZZZZUUUUUUUUUTTTTTTTTBBBBBBBBBBBBBBBSSSSSEEESSSSSBBBBBBBBBBBBBBBBBBBBAAAAX";
     //string str_test = "(((((............((((((((.......(((((........))))).........))))))))...............(((((...)))))....................)))))";
 
-    string rna_test = "UUCUAUAGCUCAGUUGGUAGGCGAGCGCACCCUUGGUAAGGGUGAGGUCGGCAGUUCCAAUCUGCCUAUCAGCACCACAA";
-    string str_test = "(((((.(.((.))))(((.....(((((((((((...)))))))(..)))((((((..)).)))))))((.).)))))))";
+    //string rna_test = "UUCUAUAGCUCAGUUGGUAGGCGAGCGCACCCUUGGUAAGGGUGAGGUCGGCAGUUCCAAUCUGCCUAUCAGCACCACAA";
+    //string str_test = "(((((.(.((.))))(((.....(((((((((((...)))))))(..)))((((((..)).)))))))((.).)))))))";
 
 
     vector<int> roots_test;
