@@ -1,6 +1,3 @@
-//
-// Created by raph on 02/06/17.
-//
 #include <string>
 #include <iostream>
 #include "node.h"

@@ -16,13 +16,11 @@ using namespace std;
 template < class T >
 inline ostream& operator << (ostream& os, const vector<T>& v)
 {
-    os << endl;
-    os << "[";
+
     for (typename vector<T>::const_iterator ii = v.begin(); ii != v.end(); ++ii)
     {
-        os << " " << *ii;
+        os << *ii << endl;
     }
-    os << " ]";
     os << endl;
     return os;
 }
@@ -156,15 +154,21 @@ vector< vector < vector< string > > > DirectPaths (vector< string > structures){
     assert(structures.size() > 0);
     vector< vector< vector< string > > > paths;
     int i = 0;
-    int j = 0;
     for (string vi : structures){
+        int j = 0;
         vector< vector< string > > row;
         for (string vj : structures){
-            row.push_back(MorganHiggs(vi, vj));
+            if(i <= j){
+                row.push_back(MorganHiggs(vi, vj));
+            }
+            else {
+                vector<string> v(1, "");
+                row.push_back(v);
+            }
             j++;
         }
-        i++;
         paths.push_back(row);
+        i++;
     }
     return paths;
 }
@@ -222,31 +226,28 @@ double PathEnergy (vector <string> path, string rna){
 //RETOURNE LA MATRICE DES ENERGIES DES CHEMINS DE LA FERMETURE TRANSITIVE (CHEMINS DIRECTS OU INDIRECTS)
 
 //tested
-vector< vector<double> > IndirectPaths (vector< vector < vector< string> > >& Paths, string rna,
-                    bool display = 0){
+vector< vector<double> > IndirectPaths (vector< vector < vector< string> > >& Paths, string rna){
     int n = Paths.size();
     vector< vector<double> > Energies(n, vector<double>(n, 0));
 
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
+    for (int j = 0; j < n; j++){
+        for (int i = 0; i <= j; i++){
             Energies[i][j] = PathEnergy(Paths[i][j], rna);
         }
     }
 
     //k est l'entier pivot
     for (int k = 0; k < n; k++){
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < n; j++){
-                if ((Energies[i][k] < Energies[i][j] || Energies[k][j] < Energies[i][j])
-                        && k != i && k != j){
+        for (int j = 0; j < n; j++){
+            for (int i = 0; i <= j; i++){
+                if ((Energies[i][k] < Energies[i][j] || Energies[k][j] < Energies[i][j]) && k < j
+                        && k > i){
                     Energies[i][j] = fmax(Energies[i][k], Energies[k][j]);
-                    if (display){ //si l'utilisateur veut visualiser les solution on les mémorise
-                        Paths[i][j].clear();
-                        Paths[i][j].insert (Paths[i][j].begin(),
-                                                   Paths[i][k].begin(), Paths[i][k].end());
-                        Paths[i][j].insert (Paths[i][j].end(),
-                                                   Paths[k][j].begin(), Paths[k][j].end());
-                    }
+                    Paths[i][j].clear();
+                    Paths[i][j].insert (Paths[i][j].begin(),
+                                               Paths[i][k].begin(), Paths[i][k].end());
+                    Paths[i][j].insert (Paths[i][j].end(),
+                                               Paths[k][j].begin(), Paths[k][j].end());
                 }
             }
         }
@@ -308,16 +309,25 @@ vector< string > getStructures(vector<string> input){
 
 int main(int argc, char **argv){
     string filename = argv[1];
-    string yesno;
-    cout << "Do you want to display the paths between conformations ? (type yes or no)" << endl;
-    cin >> yesno;
-    bool display = string == "yes" ? true : false ;
     vector<string> input = readFile(filename);
     string rna = getRNA(input);
     vector< string > structures = getStructures(input);
     vector< vector < vector<string> > > paths = DirectPaths(structures);
-    //cout << paths << endl;
-    vector< vector<double> > energies = IndirectPaths (paths, rna, display);
-    cout << paths << endl;
+    vector< vector<double> > energies = IndirectPaths (paths, rna);
+    string yesno;
+    cout << "Do you want to display the paths between two specific conformations ? (type yes or no)" << endl;
+    cin >> yesno;
+    int i;
+    cout << "Enter the number of the line which contains the first structure (RNA is in line 1) :" << endl;
+    cin >> i;
+    int j;
+    cout << "Enter the number of the line which contains the second structure(must be greater than the first) :" << endl;
+    cin >> j;
+    bool display = yesno == "yes" ? true : false ;
+    if(display){
+        cout << "path from " << paths[i - 2][j - 2][0] << " to "
+             << paths[i - 2][j - 2][paths[i - 2][j - 2].size() - 1] << " :" << endl;
+        cout << paths[i][j] << endl;
+    }
     return 0;
 }
