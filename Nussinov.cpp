@@ -88,111 +88,110 @@ void Nussinov(string rna, vector<vector<int> >& E){
 //Etant donné la matrice du nombre maximal de paire cette fonction renvoie
 // l'ensemble des solutions parenthésées sous forme d'un vecteur de string
 void traceBack(string rna, vector< vector<int> > M, int i, int j,
-               vector < vector< vector< string > > >  &expressions, bool one_solution = false){
+               vector < vector< vector< string > > > &expressions){
     int n = rna.length();
     if(i < j){
-        if(!one_solution) {
-            // on a rajouté i et j
-            if (M[i][j] == M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1))) {
-                traceBack(rna, M, i + 1, j - 1, expressions, one_solution);
-                //sans appariement
-                if (match(rna.substr(i, 1), rna.substr(j, 1)) == 0) {
-                    //on rajoute des points
-                    keepOne(expressions[i + 1][j - 1]);
-                    for (string str : expressions[i + 1][j - 1]) {
-                        expressions[i][j].push_back("." + str + ".");
-                    }
-                //avec appariement
-                } else {
-                    keepOne(expressions[i + 1][j - 1]);
-                    for (string str : expressions[i + 1][j - 1]) {
-                        expressions[i][j].push_back("(" + str + ")");
-                    }
+        // on a rajouté i et j
+        if (M[i][j] == M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1))) {
+            traceBack(rna, M, i + 1, j - 1, expressions);
+            //sans appariement
+            if (match(rna.substr(i, 1), rna.substr(j, 1)) == 0) {
+                //on rajoute des points
+                keepOne(expressions[i + 1][j - 1]);
+                for (string str : expressions[i + 1][j - 1]) {
+                    expressions[i][j].push_back("." + str + ".");
+                }
+            //avec appariement
+            } else {
+                keepOne(expressions[i + 1][j - 1]);
+                for (string str : expressions[i + 1][j - 1]) {
+                    expressions[i][j].push_back("(" + str + ")");
                 }
             }
+        }
 
-            //on a rajouté i sans appariement
-            if (M[i][j] == M[i + 1][j]) {
-                traceBack(rna, M, i + 1, j, expressions, one_solution);
-                // on rajoute un point à gauche
-                keepOne(expressions[i + 1][j]);
-                for (string str : expressions[i + 1][j]) {
-                    expressions[i][j].push_back("." + str);
-                }
+        //on a rajouté i sans appariement
+        if (M[i][j] == M[i + 1][j]) {
+            traceBack(rna, M, i + 1, j, expressions);
+            // on rajoute un point à gauche
+            keepOne(expressions[i + 1][j]);
+            for (string str : expressions[i + 1][j]) {
+                expressions[i][j].push_back("." + str);
             }
+        }
 
-            //on a rajouté j sans appariement
-            if (M[i][j] == M[i][j - 1]) {
-                traceBack(rna, M, i, j - 1, expressions, one_solution);
-                //on rajoute un point à droite
-                keepOne(expressions[i][j - 1]);
-                for (string str : expressions[i][j - 1]) {
-                    expressions[i][j].push_back(str + ".");
-                }
+        //on a rajouté j sans appariement
+        if (M[i][j] == M[i][j - 1]) {
+            traceBack(rna, M, i, j - 1, expressions);
+            //on rajoute un point à droite
+            keepOne(expressions[i][j - 1]);
+            for (string str : expressions[i][j - 1]) {
+                expressions[i][j].push_back(str + ".");
             }
+        }
 
-            //on a uni deux structures
-            for (int k = i + 1; k < j - 1; k++) {
-                if (M[i][j] == M[i][k] + M[k + 1][j]) {
-                    traceBack(rna, M, i, k, expressions, one_solution);
-                    traceBack(rna, M, k + 1, j, expressions, one_solution);
-                    keepOne(expressions[i][k]);
-                    keepOne(expressions[k + 1][j]);
-                    for (string str1 : expressions[i][k]) {
-                        for (string str2 : expressions[k + 1][j]) {
-                            expressions[i][j].push_back(str1 + str2);
-                        }
-                    }
-                }
-            }
-
-        //dans le cas où le string est trop volumineux on cherche une solution arbitraire
-        }else{
-            // on a rajouté i et j
-            if (M[i][j] == M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1))) {
-                traceBack(rna, M, i + 1, j - 1, expressions, one_solution);
-                //sans appariement
-                if (match(rna.substr(i, 1), rna.substr(j, 1)) == 0) {
-                    //on rajoute des points
-                    expressions[i][j].push_back("." + expressions[i + 1][j - 1][0] + ".");
-                    cout << 1.1;
-                //avec appariement
-                } else {
-                    expressions[i][j].push_back("(" + expressions[i + 1][j - 1][0] + ")");
-                    cout << 1.2;
-                }
-            }
-
-            //on a rajouté i sans appariement
-            else if (M[i][j] == M[i + 1][j]) {
-                traceBack(rna, M, i + 1, j, expressions, one_solution);
-                // on rajoute un point à gauche
-                expressions[i][j].push_back("." + expressions[i + 1][j][0]);
-                cout << 2;
-            }
-
-            //on a rajouté j sans appariement
-            else if (M[i][j] == M[i][j - 1]) {
-                traceBack(rna, M, i, j - 1, expressions, one_solution);
-                //on rajoute un point à droite
-                expressions[i][j].push_back(expressions[i][j - 1][0] + ".");
-                cout << 3;
-            }
-
-            //on a uni deux structures
-            else {
-                for (int k = i + 1; k < j - 1; k++) {
-                    bool done;
-                    if (M[i][j] == M[i][k] + M[k + 1][j] && !done) {
-                        traceBack(rna, M, i, k, expressions, one_solution);
-                        traceBack(rna, M, k + 1, j, expressions, one_solution);
-                        expressions[i][j].push_back(expressions[i][k][0] + expressions[k + 1][j][0]);
-                        cout << 4;
-                        done = true;
+        //on a uni deux structures
+        for (int k = i + 1; k < j - 1; k++) {
+            if (M[i][j] == M[i][k] + M[k + 1][j]) {
+                traceBack(rna, M, i, k, expressions);
+                traceBack(rna, M, k + 1, j, expressions);
+                keepOne(expressions[i][k]);
+                keepOne(expressions[k + 1][j]);
+                for (string str1 : expressions[i][k]) {
+                    for (string str2 : expressions[k + 1][j]) {
+                        expressions[i][j].push_back(str1 + str2);
                     }
                 }
             }
         }
+    }
+}
+
+void traceBackUnique (string rna, vector< vector<int> > M, int i, int j, vector< vector<int> >& pairs){
+    int n = rna.length();
+    vector<int> pair;
+    if(i < j){
+        // on a rajouté i et j
+        if (M[i][j] == M[i + 1][j - 1] + match(rna.substr(i, 1), rna.substr(j, 1))) {
+            traceBackUnique(rna, M, i + 1, j - 1, pairs);
+            //avec appariement
+            if (match(rna.substr(i, 1), rna.substr(j, 1)) == 1) {
+                //on ajoute la paire
+                pair.clear();
+                pair.push_back(i);
+                pair.push_back(j);
+                pairs.push_back(pair);
+            }
+        }
+            //on a rajouté i sans appariement
+        else if (M[i][j] == M[i + 1][j]) {
+            traceBackUnique(rna, M, i + 1, j, pairs);
+        }
+
+            //on a rajouté j sans appariement
+        else if (M[i][j] == M[i][j - 1]) {
+            traceBackUnique(rna, M, i, j - 1, pairs);
+        }
+
+            //on a uni deux structures
+        else {
+            for (int k = i + 1; k < j - 1; k++) {
+                bool done;
+                if (M[i][j] == M[i][k] + M[k + 1][j] && !done) {
+                    traceBackUnique(rna, M, i, k, pairs);
+                    traceBackUnique(rna, M, k + 1, j, pairs);
+                    done = true;
+                }
+            }
+        }
+    }
+    if (i == 0 && j == n - 1){
+        string struc(n, '.');
+        for(vector<int> pair : pairs){
+            struc[pair[0]] = '(';
+            struc[pair[1]] = ')';
+        }
+        cout << struc << endl;
     }
 }
 
@@ -206,6 +205,14 @@ int main(int argc, char **argv) {
     cout << unique << endl;
     RNA rna = RNA(rnaseq);
     Nussinov(rna.rna, rna.maxPairs);
-    traceBack(rna.rna, rna.maxPairs, 0, (int)rna.rna.length() - 1, rna.structures, unique);
-    rna.display();
+    if (!unique) {
+        traceBack(rna.rna, rna.maxPairs, 0, (int) rna.rna.length() - 1, rna.structures);
+        rna.display();
+    }
+    else{
+        cout << rna.rna << endl;
+        vector< vector<int> > pairs;
+        traceBackUnique(rna.rna, rna.maxPairs, 0, (int) rna.rna.length() - 1, pairs);
+    }
+
 }
