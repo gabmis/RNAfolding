@@ -10,7 +10,7 @@ RNA.o: RNA.h RNA.cpp
 	g++ -c RNA.cpp -o RNA.o
 
 testDisplay: node.o display_rna.cpp
-	g++ node.o displya_rna.cpp -o testDisplay
+	g++ node.o display_rna.cpp -o testDisplay
 
 node.o: node.h node.cpp
 	g++ -c node.cpp -o node.o

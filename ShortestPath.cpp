@@ -16,6 +16,7 @@ using namespace std;
 template < class T >
 inline ostream& operator << (ostream& os, const vector<T>& v)
 {
+    os << endl;
     os << "[";
     for (typename vector<T>::const_iterator ii = v.begin(); ii != v.end(); ++ii)
     {
@@ -123,7 +124,7 @@ vector< string > MorganHiggs(string A, string B){
 
         C = Conflit(min[0], min[1], S);
 
-        //ON SUPPRIME LES PAIRES DE C DE A
+        //ON SUPPRIME LES PAIRES CONFLICTUELLES DE A
 
         for (vector<int> pair : C){
             S[pair[0]] = S[pair[1]] = '.';
@@ -160,7 +161,6 @@ vector< vector < vector< string > > > DirectPaths (vector< string > structures){
         vector< vector< string > > row;
         for (string vj : structures){
             row.push_back(MorganHiggs(vi, vj));
-            cout << i << " " << j << endl;
             j++;
         }
         i++;
@@ -208,7 +208,7 @@ double Energy (string structure, string rna){
 //RETOURNE L'ÉNERGIE D'UN CHEMIN D'UNE STRUCTURE À UNE AUTRE
 
 //tested
-double PathEnergy (vector < string > path, string rna){
+double PathEnergy (vector <string> path, string rna){
     double maxEnergy = -1.4 * rna.length();
     for (string structure : path){
         maxEnergy = fmax(maxEnergy, Energy(structure, rna));
@@ -221,10 +221,9 @@ double PathEnergy (vector < string > path, string rna){
 
 //RETOURNE LA MATRICE DES ENERGIES DES CHEMINS DE LA FERMETURE TRANSITIVE (CHEMINS DIRECTS OU INDIRECTS)
 
-//TODO: A TESTER
-vector< vector<double> > IndirectPaths (vector< vector < vector< string > > >& Paths, string rna,
+//tested
+vector< vector<double> > IndirectPaths (vector< vector < vector< string> > >& Paths, string rna,
                     bool display = 0){
-    //TODO
     int n = Paths.size();
     vector< vector<double> > Energies(n, vector<double>(n, 0));
 
@@ -234,14 +233,14 @@ vector< vector<double> > IndirectPaths (vector< vector < vector< string > > >& P
         }
     }
 
+    //k est l'entier pivot
     for (int k = 0; k < n; k++){
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
                 if ((Energies[i][k] < Energies[i][j] || Energies[k][j] < Energies[i][j])
                         && k != i && k != j){
                     Energies[i][j] = fmax(Energies[i][k], Energies[k][j]);
-                    cout << "(" << i << ", " << k << ", " << j << ")" << endl;
-                    if (display){
+                    if (display){ //si l'utilisateur veut visualiser les solution on les mémorise
                         Paths[i][j].clear();
                         Paths[i][j].insert (Paths[i][j].begin(),
                                                    Paths[i][k].begin(), Paths[i][k].end());
@@ -309,13 +308,16 @@ vector< string > getStructures(vector<string> input){
 
 int main(int argc, char **argv){
     string filename = argv[1];
+    string yesno;
+    cout << "Do you want to display the paths between conformations ? (type yes or no)" << endl;
+    cin >> yesno;
+    bool display = string == "yes" ? true : false ;
     vector<string> input = readFile(filename);
     string rna = getRNA(input);
     vector< string > structures = getStructures(input);
     vector< vector < vector<string> > > paths = DirectPaths(structures);
     //cout << paths << endl;
-    vector< vector<double> > energies = IndirectPaths (paths, rna, true);
-    cout << energies << endl;
-    //cout << paths << endl;
+    vector< vector<double> > energies = IndirectPaths (paths, rna, display);
+    cout << paths << endl;
     return 0;
 }
