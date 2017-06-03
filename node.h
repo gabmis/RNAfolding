@@ -1,7 +1,3 @@
-//
-// Created by raph on 02/06/17.
-//
-
 #ifndef RNA_2D_FOLDING_NODE_H
 #define RNA_2D_FOLDING_NODE_H
 
