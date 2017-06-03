@@ -36,11 +36,9 @@ void RNA::display() {
     vector<string> res = structures[0][rna.length() - 1];
     sort(res.begin(), res.end());
     res.erase(unique(res.begin(), res.end()), res.end());
-    /*for(string s : res){
+    for(string s : res){
         cout << s << endl;
-    }*/
-    cout << "Maximum number of pairs : " << maxPairs[0][(int)rna.size() - 1] << endl;
-    cout << "Number of optimal solutions : " << res.size() << endl;
+    }
 }
 
 
