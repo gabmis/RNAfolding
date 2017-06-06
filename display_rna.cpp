@@ -19,13 +19,6 @@ int main(int argc, char **argv) {
     ofstream myfile1 ("letters.txt", ios::trunc);
     myfile1.close();
 
-    //l'exemple que nous utilisions pour débugger notre programme
-    //string rna_test = "XAAAAXBBBBBBBBBBBTTTTTTTTUUUUUUUZZZZZOOOOOOOOZZZZZUUUUUUUUUTTTTTTTTBBBBBBBBBBBBBBBSSSSSEEESSSSSBBBBBBBBBBBBBBBBBBBBAAAAX";
-    //string str_test = "(((((............((((((((.......(((((........))))).........))))))))...............(((((...)))))....................)))))";
-
-    //string rna_test = "UUCUAUAGCUCAGUUGGUAGGCGAGCGCACCCUUGGUAAGGGUGAGGUCGGCAGUUCCAAUCUGCCUAUCAGCACCACAA";
-    //string str_test = "(((((.(.((.))))(((.....(((((((((((...)))))))(..)))((((((..)).)))))))((.).)))))))";
-
     string rna_test = argv[1];
     string str_test = argv[2];
 

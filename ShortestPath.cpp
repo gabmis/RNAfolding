@@ -107,7 +107,7 @@ vector< string > MorganHiggs(string A, string B){
     path.push_back(S);
     while (S != B){
 
-        //ON CHERCHE LA PAIRE QUI MINIMISE LA TAILLE DE CONFLIT
+        //ON CHERCHE LA PAIRE DE B-Sk QUI MINIMISE LA TAILLE DE CONFLIT(S)
 
         BS = difference(B, S);
         vector <int> min;
@@ -122,14 +122,14 @@ vector< string > MorganHiggs(string A, string B){
 
         C = Conflit(min[0], min[1], S);
 
-        //ON SUPPRIME LES PAIRES CONFLICTUELLES DE A
+        //ON SUPPRIME LES PAIRES CONFLICTUELLES DE Sk
 
         for (vector<int> pair : C){
             S[pair[0]] = S[pair[1]] = '.';
             path.push_back(S);
         }
 
-        //ON AJOUTÉ LES PAIRES NON CONFLICTUELLES DE B - Sk ET ON LES ENLÈVE DE B-Sk
+        //ON AJOUTÉ LES PAIRES NON CONFLICTUELLES DE B-Sk ET ON UPDATE B-Sk
 
         BS = difference(B, S);
         for (vector<int> pair : Pairs(BS)){
