@@ -1,3 +1,3 @@
-# Repliements_et_changements_de_conformations_des_ARN
+# RNAfolding
 
 Study of RNA folding using basic modeling.
